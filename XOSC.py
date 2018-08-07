@@ -12,6 +12,8 @@ class XOSC:
 	def imu(self, addr, tags, data, client_address):
 		txt = "OSCMessage '%s' from %s: " % (addr, client_address)
 		txt += str(data)
+
+		# print txt
 		
 		data_str = str(data).strip('[]')
 		data_list = [float(i) for i in data_str.split(', ')]
@@ -35,8 +37,17 @@ class XOSC:
 
 		start_time = time.time()
 
+		temp_print_second = second
 		try :
-			time.sleep(second)
+			while time.time() - start_time < second:
+				current_second = time.time() - start_time
+				print_second = round(second - current_second , 2)
+
+				if temp_print_second != print_second:
+					print print_second
+					temp_print_second = print_second
+				continue
+			# time.sleep(second)
 
 		except KeyboardInterrupt :
 			print "\nClosing OSCServer."

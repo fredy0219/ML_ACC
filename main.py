@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 	print "Finish init"
 
-	raw_x, raw_y, raw_z = xosc.get_rawdata(5)
+	raw_x, raw_y, raw_z = xosc.get_rawdata(20)
 	mean_x, mean_y, mean_z = sp.get_mean_data(raw_x, raw_y, raw_z, stander_x, stander_y, stander_z)
 
 	filter_x, filter_y, filter_z = sp.get_filter_data(mean_x, mean_y, mean_z)

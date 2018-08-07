@@ -169,13 +169,14 @@ def plt_pca(data_right_rate, data_left_rate, data_up_rate):
 	# print x
 	# print x[:,1]
 
-def plt_rawdata_3d( raw_data , raw_data2):
+def plt_rawdata_3d( raw_data , raw_data2 , raw_data3):
 
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
 
-	# ax.plot(raw_data[:,0],raw_data[:,1],raw_data[:,2], c='b')
-	ax.plot(raw_data2[:,0],raw_data2[:,1],raw_data2[:,2],c='r')
+	ax.scatter(raw_data[:,0],raw_data[:,1],raw_data[:,2], c='b')
+	ax.scatter(raw_data2[:,0],raw_data2[:,1],raw_data2[:,2],c='r')
+	ax.scatter(raw_data3[:,0],raw_data3[:,1],raw_data3[:,2],c='y')
 
 	plt.show()
 

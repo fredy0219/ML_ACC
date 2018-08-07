@@ -1,7 +1,8 @@
 import signal_processing as sp
 import plt
 import database_processing as dp
-import data_collect as dc
+#import data_collect as dc
+import XOSC
 import analysis
 import numpy as np
 
@@ -91,7 +92,7 @@ if __name__ == '__main__':
 
 	train_test_pca = analysis.pca(train_test, 3)
 	train_test_first_pc = train_test_pca.components_[0]
-	train_test_transform_data = train_test_pca.transform(test_downsampling_data)
+	train_test_transform_data = train_test_pca.transform(train_test)
 	plt.plt_pca_3d(train_test , train_test_transform_data , train_test_first_pc, "Single Dataset 3D and PCA First Eigenvector","test_data_3D_pca_rotation")
 	plt.plt_line_collection(train_test ,"Single Dataset Exploded View","test_data_rotation_exploded")
 	# plt.plt_raw(train_test, "test_downsampling_data")

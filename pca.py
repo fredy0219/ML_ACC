@@ -32,7 +32,7 @@ def get_signal_distribution( signal_list, pca_one ):
 
 	return first_pc_normal_vector , second_pc_normal_vector
 
-def pca_rmes(target_id, gesture):
+def pca_rmse(target_id, gesture):
 
 	# data processing
 	data_list = np.array(dp.db_extract_list_signal_downsampling(gesture , target_id))
@@ -57,31 +57,68 @@ def pca_rmes(target_id, gesture):
 
 if __name__ == '__main__':
 
-	# target_list = [1,100,227] #TRIANGLE_RIGHT,TRIANGLE_LEFT,TRIANGLE_FLAT
+	# # target_list = [1,100,227] #TRIANGLE_RIGHT,TRIANGLE_LEFT,TRIANGLE_FLAT
 
-	# target_id = target_list[2]
+	# # target_id = target_list[2]
 
-	for i in range(200,299):
-		target_data = dp.db_extract_one_signal_downsampling(i)
-		target_pca = analysis.pca(target_data, 3)
-		target_first_pc = target_pca.components_[0]
-
-
-	# r_scroe = pca_rmes(target_list, target_id, 'STRAIGHT_RIGHT')
-	# l_score = pca_rmes(target_list, target_id, 'STRAIGHT_LEFT')
-	# plt.plt_rms_score_box([r_scroe, l_score])
-
-		tr_score = pca_rmes(i, 'TRIANGLE_RIGHT')
-		tl_score = pca_rmes(i, 'TRIANGLE_LEFT')
-		tf_score = pca_rmes(i, 'TRIANGLE_FLAT')
-
-		print i
-
-		plt.plt_rms_score_box([tr_score,tl_score,tf_score])
+	# for i in range(200,299):
+	# 	target_data = dp.db_extract_one_signal_downsampling(i)
+	# 	target_pca = analysis.pca(target_data, 3)
+	# 	target_first_pc = target_pca.components_[0]
 
 
+	# # r_scroe = pca_rmes(target_list, target_id, 'STRAIGHT_RIGHT')
+	# # l_score = pca_rmes(target_list, target_id, 'STRAIGHT_LEFT')
+	# # plt.plt_rms_score_box([r_scroe, l_score])
 
+	# 	tr_score = pca_rmse(i, 'TRIANGLE_RIGHT')
+	# 	tl_score = pca_rmse(i, 'TRIANGLE_LEFT')
+	# 	tf_score = pca_rmse(i, 'TRIANGLE_FLAT')
 
+	# 	print i
+
+	# 	plt.plt_rms_score_box([tr_score,tl_score,tf_score])
+
+	# for i in range(200,301):
+	# 	target_data = dp.db_extract_one_signal_downsampling(i)
+	# 	target_pca = analysis.pca(target_data, 3)
+	# 	target_first_pc = target_pca.components_[0]
+	# 	target_transform_data = target_pca.transform(target_data)
+
+	# 	dp.db_insert_elginvector_data(i , target_first_pc[0] , target_first_pc[1] , target_first_pc[2])
+
+		# plt.plt_pca_3d(target_data , target_transform_data , target_first_pc, "Single Dataset 3D and PCA First Eigenvector","test_data_3D_pca")
+
+		# train_data = sp.rotation_signal( [1,0,0] , target_first_pc, target_data)
+
+		# train_pca = analysis.pca(train_data, 3)
+		# train_first_pc = train_pca.components_[0]
+		# train_transform_data = train_pca.transform(train_data)
+
+		# print target_first_pc , train_first_pc
+
+		# plt.plt_pca_3d(train_data , train_transform_data , train_first_pc, "Single Dataset 3D and PCA First Eigenvector","test_data_3D_pca_rotation")
+
+	tr_data = []
+	tl_data = []
+	tf_data = []
+	for i in range(0,101):
+		result = dp.db_extract_one_elginvector_data(i)
+		tr_data.append(result)
+
+	for i in range(101,201):
+		result = dp.db_extract_one_elginvector_data(i)
+		tl_data.append( result)
+
+	for i in range(201,301):
+		result = dp.db_extract_one_elginvector_data(i)
+		tf_data.append( result)
+
+	tr = np.array(tr_data)
+	tl = np.array(tl_data)
+	tf = np.array(tf_data)
+
+	plt.plt_rawdata_3d( tr , tl , tf)
 
 
 	# sp.rmse_timeseries(target_data, tr_list)

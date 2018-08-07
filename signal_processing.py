@@ -62,7 +62,7 @@ def segmentation(slope_x, slope_y, slope_z):
 
 def signal_channel_segmentation(data):
 
-	threadhold = 0.3
+	threadhold = 0.2
 
 	# 1) amplitude analyze
 	index = []

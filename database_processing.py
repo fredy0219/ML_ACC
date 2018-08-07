@@ -3,7 +3,8 @@ import numpy as np
 
 def db_extract_max_id():
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	cursor.execute("SELECT MAX(ID) from raw_data")
@@ -21,7 +22,8 @@ def db_insert_rawdata(segmentation_x, segmentation_y, segmentation_z, gesture_in
 
 	# print "db_insert_rawdata~~~~"
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	cursor.execute("SELECT MAX(ID) from raw_data")
@@ -38,7 +40,7 @@ def db_insert_rawdata(segmentation_x, segmentation_y, segmentation_z, gesture_in
 	id_collect = []
 	for i in range(len(segmentation_x)):
 		id_collect.append(id_start+i)
-		cursor.execute("INSERT INTO id_gesture(ID, Gesture) VALUES ('%d', '%s')" % (id_start + i , gesture_in))
+		cursor.execute("INSERT INTO gesture_id(ID, Gesture) VALUES ('%d', '%s')" % (id_start + i , gesture_in))
 		for j in range(len(segmentation_x[i])):
 			cursor.execute( "INSERT INTO raw_data(ID, X, Y, Z) VALUES ('%d', '%f', '%f', '%f')" % (id_start + i,segmentation_x[i][j], segmentation_y[i][j], segmentation_z[i][j]))
 			# print "123" 
@@ -50,7 +52,8 @@ def db_insert_rawdata(segmentation_x, segmentation_y, segmentation_z, gesture_in
 
 def db_insert_filter(id_collect,filter_x, filter_y, filter_z):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	for i in range(len(id_collect)):
@@ -64,7 +67,8 @@ def db_insert_filter(id_collect,filter_x, filter_y, filter_z):
 
 def db_insert_downsampling_data(id_collect,ds_x,ds_y,ds_z):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	for i in range(len(id_collect)):
@@ -76,7 +80,8 @@ def db_insert_downsampling_data(id_collect,ds_x,ds_y,ds_z):
 
 def db_insert_normalization_data(id_collect,n_x,n_y,n_z):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	for i in range(len(id_collect)):
@@ -85,10 +90,38 @@ def db_insert_normalization_data(id_collect,n_x,n_y,n_z):
 	db.commit()
 	db.close()
 
+def db_insert_elginvector_data(id, ev_x, ev_y, ev_z):
 
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
+	cursor = db.cursor()
+
+	cursor.execute("INSERT INTO elginvector_data (ID, X, Y, Z) VALUES ('%d', '%f','%f','%f')" % ( id , ev_x, ev_y, ev_z))
+	db.commit()
+	db.close()
+
+def db_extract_one_gesture_label(id):
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
+	cursor = db.cursor()
+
+	cursor.execute("SELECT gesture_type from gesture_id where ID=%s" % id)
+	results = cursor.fetchall()
+
+	return results[0][0]
+
+
+
+def db_extract_one_elginvector_data(id):
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
+	cursor = db.cursor()
+
+	cursor.execute("SELECT * from elginvector_data where ID=%s" % id)
+	results = cursor.fetchall()
+
+	return np.array([results[0][1] , results[0][2], results[0][3]])
 
 def db_extract_one_signal(id):
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	cursor.execute("SELECT * from raw_data where ID=%s" % id)
@@ -103,7 +136,8 @@ def db_extract_one_signal(id):
 
 def db_extract_one_signal_filter(id):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 	cursor.execute("SELECT * from filter_data where ID=%s" % id)
 	results = cursor.fetchall()
@@ -117,7 +151,8 @@ def db_extract_one_signal_filter(id):
 
 def db_extract_one_signal_downsampling(id):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 	cursor.execute("SELECT * from downsampling_data where ID=%s" % id)
 	results = cursor.fetchall()
@@ -131,7 +166,8 @@ def db_extract_one_signal_downsampling(id):
 
 def db_extract_one_signal_normalization(id):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 	cursor.execute("SELECT * from normalization_data where ID=%s" % id)
 	results = cursor.fetchall()
@@ -147,7 +183,8 @@ def db_extract_one_signal_normalization(id):
 
 def db_extract_list_signal(gesture , target_id):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	cursor.execute("SELECT rf.* from raw_data AS rf INNER JOIN id_gesture AS ig ON rf.id = ig.id AND ig.Gesture = '%s'" % gesture)
@@ -178,7 +215,8 @@ def db_extract_list_signal(gesture , target_id):
 
 def db_extract_list_signal_downsampling(gesture, target_id):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	cursor.execute("SELECT rf.* from downsampling_data AS rf INNER JOIN id_gesture AS ig ON rf.id = ig.id AND ig.Gesture = '%s'" % gesture)
@@ -208,7 +246,8 @@ def db_extract_list_signal_downsampling(gesture, target_id):
 
 def db_extract_list_signal_normalization(gesture, target_id):
 
-	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	# db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="hand_action_recongnition")
+	db = MySQLdb.connect(host="localhost",user="root", passwd="fredy0219", db="XIO_DATA")
 	cursor = db.cursor()
 
 	cursor.execute("SELECT rf.* from normalization_data AS rf INNER JOIN id_gesture AS ig ON rf.id = ig.id AND ig.Gesture = '%s'" % gesture)

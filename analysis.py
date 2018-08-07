@@ -6,3 +6,4 @@ def pca(data,n):
 	pca = PCA(n_components=n)
 	pca.fit(data)
 	return pca
+
